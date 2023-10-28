@@ -54,7 +54,7 @@ fn word_prompt(db: tauri::State<'_, DatabaseState>) -> Result<WordPrompt, String
     let ans = rng.gen_range(0, 6);
     let mut points: Vec<Data> = vec![];
     for _ in 0..6 {
-        let idx: usize = rng.gen_range(0, 5943);
+        let idx: usize = rng.gen_range(0, data.len());
         points.push(data.get(idx).unwrap().clone());
     }
 
@@ -90,7 +90,7 @@ fn meaning_prompt(db: tauri::State<'_, DatabaseState>) -> Result<MeaningPrompt, 
     let ans = rng.gen_range(0, 4);
     let mut points: Vec<Data> = vec![];
     for _ in 0..4 {
-        let idx: usize = rng.gen_range(0, 5943);
+        let idx: usize = rng.gen_range(0, data.len());
         points.push(data.get(idx).unwrap().clone());
     }
 

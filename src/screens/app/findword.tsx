@@ -89,7 +89,6 @@ const ChooseWord = () => {
             case "E": bts.e = 2; break;
             case "F": bts.f = 2; break;
         }
-        console.log(`setwet = ${setwet}`);
         setbuttonstates(bts);
         console.log(bts)
         setSubmited(true);

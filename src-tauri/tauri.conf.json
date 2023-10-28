@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "dict_game",
-    "version": "0.0.0"
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
@@ -28,6 +28,9 @@
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
+      ],
+      "resources": [
+        "data.csv"
       ]
     },
     "security": {

@@ -30,6 +30,7 @@ const ChooseWord = () => {
     const [buttonstates, setbuttonstates] = useState(BTS);
 
     const handlebuttonclick = (option: OPT | undefined) => {
+        if (submited) return () => {};
         switch (option) {
             case OPT.A: return () => setSelected("A");
             case OPT.B: return () => setSelected("B");
