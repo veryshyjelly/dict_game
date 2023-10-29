@@ -15,7 +15,7 @@ const Option = ({text, active, state, onClick} : {text: string | undefined, acti
 }
 
 
-const ChooseWord = () => {
+const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch<React.SetStateAction<number>>}) => {
     const [selected, setSelected] = useState("");
     const [promt, setPrompt] = useState<{
         a: string, b: string, 
@@ -24,32 +24,24 @@ const ChooseWord = () => {
         answer: string, meaning: string}
     >();
     const [loading, setLoading] = useState(false);
-    const [submited, setSubmited] = useState(false);
     // 1 is normal 2 is correct 3 is incorrect
     const BTS = {a: 1, b: 1, c: 1, d: 1, e: 1, f: 1}
     const [buttonstates, setbuttonstates] = useState(BTS);
+    const isactive = (opt: string) => opt === selected;
 
     const handlebuttonclick = (option: OPT | undefined) => {
-        if (submited) return () => {};
         switch (option) {
-            case OPT.A: return () => setSelected("A");
-            case OPT.B: return () => setSelected("B");
-            case OPT.C: return () => setSelected("C");
-            case OPT.D: return () => setSelected("D");
-            case OPT.E: return () => setSelected("E");
-            case OPT.F: return () => setSelected("F");
+            case OPT.A: return () => {setSelected("A"); onsubmit("A")} 
+            case OPT.B: return () => {setSelected("B"); onsubmit("B")} 
+            case OPT.C: return () => {setSelected("C"); onsubmit("C")} 
+            case OPT.D: return () => {setSelected("D"); onsubmit("D")} 
+            case OPT.E: return () => {setSelected("E"); onsubmit("E")} 
+            case OPT.F: return () => {setSelected("F"); onsubmit("F")} 
             default: return () => setSelected("");
         } 
     }
-    const isactive = (opt: string) => opt === selected;
-
-    useEffect(() => {
-        fetch_prompt();
-    }, [])
-        
 
     const fetch_prompt = async () => {
-        setSubmited(false);
         setLoading(true);
         try {
             let res = await invoke('word_prompt');
@@ -61,19 +53,15 @@ const ChooseWord = () => {
         setSelected("");
         setbuttonstates(BTS);
         setLoading(false);
-        return true;
     }
 
-    const onsubmit = () => {
-        if (selected == "") return;
-        let setwet = 1;
-        if (selected == promt?.answer) {
-            setwet = 2;
-        } else {
-            setwet = 3;
-        }
+    const onsubmit = (sub: string) => {
+        if (sub == "") return;
+        let setwet = promt?.answer == sub ? 2 : 3;
         let bts =  {...BTS};
-        switch (selected) {
+        if (setwet == 2) score++;
+        setScore(score);
+        switch (sub) {
             case "A": bts.a = setwet; break;
             case "B": bts.b = setwet; break;
             case "C": bts.c = setwet; break;
@@ -81,24 +69,11 @@ const ChooseWord = () => {
             case "E": bts.e = setwet; break;
             case "F": bts.f = setwet; break;
         }
-        switch (promt?.answer) {
-            case "A": bts.a = 2; break;
-            case "B": bts.b = 2; break;
-            case "C": bts.c = 2; break;
-            case "D": bts.d = 2; break;
-            case "E": bts.e = 2; break;
-            case "F": bts.f = 2; break;
-        }
         setbuttonstates(bts);
-        console.log(bts)
-        setSubmited(true);
-        setTimeout(() => {
-            console.log("helo")
-            console.log(submited)
-            console.log(selected == promt?.answer)
-            if (selected == promt?.answer) {fetch_prompt();}
-        }, 500);
+        setTimeout(() => {if (sub == promt?.answer) {fetch_prompt();}}, 200);
     }
+
+    useEffect(() => {score = 0; fetch_prompt(); setScore(score);}, [])
 
     return (
         <Stack m={12}>
@@ -126,15 +101,6 @@ const ChooseWord = () => {
                 <Option text={promt?.f} active={isactive("F")} onClick={handlebuttonclick(OPT.F)} state={buttonstates.f}/>
             </Grid.Col>
             <Grid.Col display={"flex"}>
-            {!submited && 
-            <Button variant={"filled"} mx={"auto"} radius={"xl"} size="lg" fw={500} color="teal" onClick={onsubmit}>
-                {"Submit"}
-            </Button>}
-            {submited && 
-             <Button variant={"filled"} mx={"auto"} radius={"xl"} size="lg" fw={500} onClick={fetch_prompt}>
-                {"Next"}
-            </Button>}
-
             </Grid.Col>
         </Grid>
         </Stack>
