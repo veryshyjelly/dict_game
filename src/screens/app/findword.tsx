@@ -70,7 +70,7 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
             case "F": bts.f = setwet; break;
         }
         setbuttonstates(bts);
-        setTimeout(() => {if (sub == promt?.answer) {fetch_prompt();}}, 200);
+        setTimeout(() => {if (sub == promt?.answer) {fetch_prompt();}}, 150);
     }
 
     useEffect(() => {score = 0; fetch_prompt(); setScore(score);}, [])
