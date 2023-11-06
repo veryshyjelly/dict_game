@@ -21,7 +21,7 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
         a: string, b: string, 
         c: string, d: string, 
         e: string, f: string, 
-        answer: string, meaning: string}
+        answer: string, meaning: string, pos: string}
     >();
     const [loading, setLoading] = useState(false);
     // 1 is normal 2 is correct 3 is incorrect
@@ -45,7 +45,7 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
         setLoading(true);
         try {
             let res = await invoke('word_prompt');
-            setPrompt(res as { a: string; b: string; c: string; d: string; e: string; f: string; answer: string; meaning: string; } | undefined);
+            setPrompt(res as { a: string; b: string; c: string; d: string; e: string; f: string; answer: string; meaning: string; pos: string } | undefined);
             console.log(res);
         } catch (err) {
             console.log(err);
@@ -85,6 +85,12 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
             <Text my={20} fw={500} fz={20} mx={60} style={{userSelect: "none"}}>
                 {promt?.meaning}
             </Text>
+            <div style={{border: "2px solid lightgreen", borderRadius: "20px",
+                 position: "absolute", right: 50, top: 130, padding: 5}}>
+                <Text>
+                    {promt?.pos}
+                </Text>
+            </div>
         </div>
 
         <Grid mx={"auto"} display={"flex"} justify="space-around">
