@@ -68,7 +68,7 @@ function App() {
 
   return (
     <Container fluid style={{overflow: "hidden"}}>
-      <CountDown minutes={30} seconds={1} miliseconds={0} score={score} highscore={highscore} setScore={setScore} active={active} setActive={setActive}/>
+      <CountDown minutes={1} seconds={0} miliseconds={1} score={score} highscore={highscore} setScore={setScore} active={active} setActive={setActive}/>
       <Switch checked={active} onChange={(e) => setActive(e.currentTarget.checked)} 
         pos={"absolute"} color="blue.4" size="xl" ml={20} mt={20} onLabel="MEANING" offLabel="WORD"/>
       {!active && <ChooseWord score={score} setScore={setScore}/> }     
