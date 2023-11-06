@@ -67,10 +67,11 @@ pub fn word_prompt(db: tauri::State<'_, DatabaseState>) -> Result<WordPrompt, St
 
     let mut alike: Vec<(usize, f64)> = vec![(0, f64::MAX); 10];
     for i in 0..data.len() {
-        if i == prompt_idx {
+        let det = data.get(i).unwrap();
+        if det.word.cmp(&ans_word.word).is_eq() {
             continue;
         }
-        let cosine_similarity = cosine(&ans_word.vec, &data.get(i).unwrap().vec);
+        let cosine_similarity = cosine(&ans_word.vec, &det.vec);
         // println!("similarity: {}", cosine_similarity);
         if let Some(idx) = smallest_bigger(&alike, cosine_similarity) {
             alike[idx] = (i, cosine_similarity); 
