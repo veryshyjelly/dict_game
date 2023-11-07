@@ -38,7 +38,6 @@ accompany,verb,to travel or go somewhere with somebody/something
 accomplish,verb,to succeed in doing or completing something
 accomplishment,noun,an impressive thing that is done or achieved after a lot of work
 accordance,noun,according to a rule or the way that somebody says that something should be done
-according to,preposition,as stated or reported by somebody/something
 accordingly,adverb,in a way that is appropriate to what has been done or said in a particular situation
 account,noun,"an arrangement that somebody has with a bank, etc. to keep money there, take some out, etc."
 account,verb,to have the opinion that somebody/something is a particular thing
@@ -177,9 +176,9 @@ alive,adjective,living; not dead
 all,adverb,completely
 all,determiner,the whole number of
 all,pronoun,the whole number or amount
-all right,adjective,acceptable; in an acceptable manner
-all right,adverb,acceptable; in an acceptable manner
-all right,exclamation,used to check that somebody agrees or understands
+allright,adjective,acceptable; in an acceptable manner
+allright,adverb,acceptable; in an acceptable manner
+allright,exclamation,used to check that somebody agrees or understands
 allegation,noun,"a public statement that is made without giving proof, accusing somebody of doing something that is wrong or illegal"
 allege,verb,to state something as a fact but without giving proof
 allegedly,adverb,expressed as though something is a fact but without giving any proof
@@ -253,7 +252,7 @@ anxious,adjective,feeling worried or nervous
 any,adverb,"used to emphasize an adjective or adverb in negative sentences or questions, meaning ‘at all’"
 any,determiner,"used with uncountable or plural nouns in negative sentences and questions, after if or whether, and after some verbs such as prevent, ban, forbid, etc. to refer to an amount or a number of something, however large or small"
 any,pronoun,"used in negative sentences and in questions and after if or whether to refer to an amount or a number, however large or small"
-any more,adverb,"often used at the end of negative sentences and at the end of questions, to mean ‘any longer’"
+anymore,adverb,"often used at the end of negative sentences and at the end of questions, to mean ‘any longer’"
 anybody,pronoun,"used instead of somebody in negative sentences and in questions after if/whether, and after verbs such as prevent, forbid, avoid, etc."
 anyone,pronoun,"used instead of someone in negative sentences and in questions after if/whether, and after verbs such as prevent, forbid, avoid, etc."
 anything,pronoun,"used instead of something in negative sentences and in questions; after if/whether; and after verbs such as prevent, ban, avoid, etc."
@@ -2461,7 +2460,6 @@ hatred,noun,a very strong feeling of dislike for somebody/something
 haunt,verb,"if the ghost of a dead person haunts a place, people say that they have seen it there"
 have,verb,"to own, hold or possess something"
 have,auxiliary verb,used with the past participle to form perfect tenses
-have to,modal verb,used to show that you must do something
 hazard,noun,something that can be dangerous or cause damage
 he,pronoun,a male person or animal that has already been mentioned or is easily identified
 head,noun,"the part of the body on top of the neck containing the eyes, nose, mouth and brain"
@@ -2602,7 +2600,7 @@ hydrogen,noun,
 hypothesis,noun,an idea or explanation of something that is based on a few known facts but that has not yet been proved to be true or correct
 I,pronoun,used as the subject of a verb when the speaker or writer is referring to himself/herself
 ice,noun,water that has frozen and become solid
-ice cream,noun,"a type of sweet frozen food made from milk fat, tasting of fruit, chocolate, etc. and often eaten as a dessert; a small amount of this food intended for one person, often served in a container made of biscuit that is like a cone in shape"
+icecream,noun,"a type of sweet frozen food made from milk fat, tasting of fruit, chocolate, etc. and often eaten as a dessert; a small amount of this food intended for one person, often served in a container made of biscuit that is like a cone in shape"
 icon,noun,a small symbol on a computer or smartphone screen that represents a program or a file
 ID,noun,"an official way of showing who you are, for example a document with your name, date of birth and often a photograph on it (the abbreviation for ‘identity’ or ‘identification’) "
 idea,noun,"a plan, thought or suggestion, especially about what to do in a particular situation"
@@ -3491,7 +3489,7 @@ newspaper,noun,"a set of large printed sheets of paper, or a website, containing
 next,adjective,"coming straight after somebody/something in time, order or space"
 next,adverb,after something else; then; afterwards
 next,noun,a person or thing that is next
-next to,preposition,in or into a position right by somebody/something
+next-to,preposition,in or into a position right by somebody/something
 nice,adjective,pleasant or attractive
 niche,noun,"a comfortable or suitable role, job, way of life, etc."
 night,noun,"the time between one day and the next when it is dark, when people usually sleep"
@@ -3501,7 +3499,7 @@ nineteen,number,
 ninety,number,90
 no,determiner,not one; not any; not a
 no,exclamation,used to give a negative reply or statement
-no one,pronoun,not anyone; no person
+no-one,pronoun,not anyone; no person
 noble,adjective,"having or showing fine personal qualities that people admire, such as courage, honesty and care for others"
 nobody,pronoun,not anyone; no person
 nod,verb,"if you nod, nod your head or your head nods, you move your head up and down to show agreement, understanding, etc."
@@ -3813,9 +3811,9 @@ pension,noun,
 people,noun,"human beings; men, women and children"
 pepper,noun,"a powder made from dried berries (called peppercorns), used to give a hot, spicy taste to food"
 per,preposition,"used to express the cost or amount of something for each person, number used, distance travelled, etc."
-per cent,adjective,"by, in or for every hundred"
-per cent,adverb,"by, in or for every hundred"
-per cent,noun,one part in every hundred
+percent,adjective,"by, in or for every hundred"
+percent,adverb,"by, in or for every hundred"
+percent,noun,one part in every hundred
 perceive,verb,to understand or think of somebody/something in a particular way
 percentage,noun,"the number, amount or rate of something, expressed as if it is part of a total that is 100; a part or share of a whole"
 perception,noun,"an idea, a belief or an image you have as a result of how you see or understand something"
@@ -5638,7 +5636,7 @@ usage,noun,the way in which words are used in a language
 use,noun,the act of using something; the state of being used
 use,verb,"to do something with a machine, a method, an object, etc. for a particular purpose"
 used,adjective,familiar with something because you do it or experience it often
-used to,modal verb,used to say that something happened continuously or frequently during a period in the past
+used-to,modal verb,used to say that something happened continuously or frequently during a period in the past
 useful,adjective,that can help you to do or achieve what you want
 useless,adjective,not useful; not doing or achieving what is needed or wanted
 user,noun,a person or thing that uses something

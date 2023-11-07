@@ -65,7 +65,7 @@ pub fn word_prompt(db: tauri::State<'_, DatabaseState>) -> Result<WordPrompt, St
     let prompt_idx = rng.gen_range(0, data.len());
     let ans_word = data.get(prompt_idx).unwrap();
 
-    let mut alike: Vec<(usize, f64)> = vec![(0, f64::MAX); 10];
+    let mut alike: Vec<(usize, f64)> = vec![(0, f64::MAX); 15];
     for i in 0..data.len() {
         let det = data.get(i).unwrap();
         if det.word.cmp(&ans_word.word).is_eq() {
@@ -77,29 +77,30 @@ pub fn word_prompt(db: tauri::State<'_, DatabaseState>) -> Result<WordPrompt, St
             alike[idx] = (i, cosine_similarity); 
         }
     }
+    let mut alike_iter = alike.iter();
 
     let ans = rng.gen_range(0, 6);
-    let mut points: Vec<usize> = vec![];
+    let mut points: Vec<String> = vec![];
     while points.len() < 6 {
-        let idx: usize = alike.get(rng.gen_range(0, 10)).unwrap().0;
-        if points.contains(&idx) || idx == prompt_idx {
+        let word = data.get(alike_iter.next().unwrap().0).unwrap().word.clone();
+        if points.contains(&word) {
             continue;
         }
-        points.push(idx);
+        points.push(word);
     }
 
-    points[ans] = prompt_idx;
+    points[ans] = ans_word.word.clone();
 
     let prompt = WordPrompt {
         answer: "ABCDEF".chars().nth(ans).unwrap().to_string(),
         meaning: ans_word.meaning.clone(),
         pos: ans_word.part.clone(),
-        a: data.get(points[0]).unwrap().word.clone(),
-        b: data.get(points[1]).unwrap().word.clone(),
-        c: data.get(points[2]).unwrap().word.clone(),
-        d: data.get(points[3]).unwrap().word.clone(),
-        e: data.get(points[4]).unwrap().word.clone(),
-        f: data.get(points[5]).unwrap().word.clone(),
+        a: points[0].clone(),
+        b: points[1].clone(),
+        c: points[2].clone(),
+        d: points[3].clone(),
+        e: points[4].clone(),
+        f: points[5].clone(),
     };
 
     Ok(prompt)

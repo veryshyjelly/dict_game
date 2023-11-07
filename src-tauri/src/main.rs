@@ -18,7 +18,7 @@ fn main() {
 
 fn get_db(file_name: &str, model_path: &str) -> Vec<Data> {
     let mut word2vec: HashMap<String, Vec<f64>> = HashMap::new();
-    let model = fs::read_to_string(model_path).unwrap();
+    let model = fs::read_to_string(model_path).unwrap().replace("\r", "");
     for word_vec in model.split("\n").skip(1) {
         let mut vector: Vec<f64> = Vec::with_capacity(300);
         let mut word_iter = word_vec.split(" ").into_iter();
@@ -26,7 +26,7 @@ fn get_db(file_name: &str, model_path: &str) -> Vec<Data> {
         // println!("{}", word);
         
         for v in word_iter {
-            vector.push(v.parse().unwrap());
+            vector.push(v.parse().expect("error while parsing value"));
         }
         word2vec.insert(word.to_string(), vector);
     }
