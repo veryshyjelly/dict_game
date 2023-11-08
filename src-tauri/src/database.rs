@@ -7,7 +7,7 @@ pub struct Data {
     pub word: String,
     pub meaning: String,
     pub part: String,
-    pub vec: Vec<f64>
+    pub vec: Vec<f64>,
 }
 
 impl Data {
@@ -16,7 +16,7 @@ impl Data {
             word: word.to_string(),
             meaning: meaning.to_string(),
             part: part.to_string(),
-            vec: vec![]
+            vec: vec![],
         }
     }
 }

@@ -6,7 +6,10 @@ pub mod database;
 use commands::*;
 use database::*;
 
-use std::{fs::{File, self}, collections::HashMap};
+use std::{
+    collections::HashMap,
+    fs::{self, File},
+};
 
 fn main() {
     tauri::Builder::default()
@@ -18,26 +21,27 @@ fn main() {
 
 fn get_db(file_name: &str, model_path: &str) -> Vec<Data> {
     let mut word2vec: HashMap<String, Vec<f64>> = HashMap::new();
-    let model = fs::read_to_string(model_path).unwrap().replace("\r", "");
-    for word_vec in model.split("\n").skip(1) {
-        let mut vector: Vec<f64> = Vec::with_capacity(300);
-        let mut word_iter = word_vec.split(" ").into_iter();
-        let word = word_iter.next().unwrap();
-        // println!("{}", word);
-        
-        for v in word_iter {
-            vector.push(v.parse().expect("error while parsing value"));
-        }
-        word2vec.insert(word.to_string(), vector);
-    }
-
+    fs::read_to_string(model_path)
+        .unwrap()
+        .replace("\r", "")
+        .split("\n")
+        .skip(1)
+        .for_each(|word_vec| {
+            let mut word_iter = word_vec.split(" ").into_iter();
+            let word = word_iter.next().unwrap();
+            word2vec.insert(
+                word.to_string(),
+                word_iter
+                    .map(|v| v.parse().expect("error while parsing"))
+                    .collect::<Vec<f64>>(),
+            );
+        });
 
     let file = File::open(file_name).unwrap();
     let mut rdr = csv::Reader::from_reader(file);
     let mut db: Vec<Data> = vec![];
 
-
-    for result in rdr.records() {
+    rdr.records().for_each(|result| {
         if let Ok(record) = result {
             let mut d = Data::new(
                 record.get(0).unwrap(),
@@ -51,9 +55,7 @@ fn get_db(file_name: &str, model_path: &str) -> Vec<Data> {
                 }
             }
         }
-    }
-
-    // println!("dblength: {}", db.len());
+    });
 
     db
 }

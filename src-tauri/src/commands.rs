@@ -1,5 +1,7 @@
+use std::{cmp::Reverse, collections::BinaryHeap};
+
 use super::database::*;
-use rand::{self, Rng};
+use rand::{self, seq::SliceRandom, thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -32,29 +34,29 @@ fn cosine(a: &Vec<f64>, b: &Vec<f64>) -> f64 {
     dot / (norm_a * norm_b)
 }
 
-fn smallest_bigger(alike: &Vec<(usize, f64)>, simi: f64) -> Option<usize> {
-    let size = alike.len();
-    for i in 0..size {
-        if alike[i].0 == 0 {
-            return Some(i);
-        }
-    }
+struct Point {
+    index: usize,
+    similarity: f64,
+}
 
-    let mut max = 0.0;
-    let mut max_index = alike.len();
-    for i in 0..size {
-        if (alike[i].1 < simi) && (alike[i].1 > max) {
-            max = alike[i].1;
-            max_index = i;
-        }
+impl PartialEq for Point {
+    fn eq(&self, other: &Self) -> bool {
+        self.index == other.index
     }
+}
 
-    if max_index < size {
-        Some(max_index) 
-    } else {
-        None
+impl Eq for Point {}
+
+impl PartialOrd for Point {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.similarity.total_cmp(&other.similarity))
     }
+}
 
+impl Ord for Point {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.similarity.total_cmp(&other.similarity)
+    }
 }
 
 #[tauri::command]
@@ -65,33 +67,42 @@ pub fn word_prompt(db: tauri::State<'_, DatabaseState>) -> Result<WordPrompt, St
     let prompt_idx = rng.gen_range(0, data.len());
     let ans_word = data.get(prompt_idx).unwrap();
 
-    let mut alike: Vec<(usize, f64)> = vec![(0, f64::MAX); 15];
+    let mut heap: BinaryHeap<Reverse<Point>> = BinaryHeap::new();
+
     for i in 0..data.len() {
         let det = data.get(i).unwrap();
         if det.word.cmp(&ans_word.word).is_eq() {
             continue;
         }
         let cosine_similarity = cosine(&ans_word.vec, &det.vec);
-        // println!("similarity: {}", cosine_similarity);
-        if let Some(idx) = smallest_bigger(&alike, cosine_similarity) {
-            alike[idx] = (i, cosine_similarity); 
+        heap.push(Reverse(Point {
+            index: i,
+            similarity: cosine_similarity,
+        }));
+        if heap.len() > 15 {
+            heap.pop();
         }
     }
-    let mut alike_iter = alike.iter();
 
     let ans = rng.gen_range(0, 6);
-    let mut points: Vec<String> = vec![];
-    while points.len() < 6 {
-        let word = data.get(alike_iter.next().unwrap().0).unwrap().word.clone();
-        if points.contains(&word) {
+    let mut points: Vec<String> = vec!["".to_string(); 6];
+    let mut plen = 0;
+    let mut heap_vec = heap.into_iter().map(|v| v.0).collect::<Vec<_>>();
+    heap_vec.sort();
+
+    while plen < 6 {
+        let det = data.get(heap_vec.pop().unwrap().index).unwrap();
+        if points.contains(&det.word) {
             continue;
         }
-        points.push(word);
+        points[plen] = det.word.clone();
+        plen += 1;
     }
 
+    points.shuffle(&mut thread_rng());
     points[ans] = ans_word.word.clone();
 
-    let prompt = WordPrompt {
+    Ok(WordPrompt {
         answer: "ABCDEF".chars().nth(ans).unwrap().to_string(),
         meaning: ans_word.meaning.clone(),
         pos: ans_word.part.clone(),
@@ -101,9 +112,7 @@ pub fn word_prompt(db: tauri::State<'_, DatabaseState>) -> Result<WordPrompt, St
         d: points[3].clone(),
         e: points[4].clone(),
         f: points[5].clone(),
-    };
-
-    Ok(prompt)
+    })
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -117,45 +126,44 @@ pub struct MeaningPrompt {
 }
 
 #[tauri::command]
-pub fn meaning_prompt(db: tauri::State<'_, DatabaseState>) -> Result<MeaningPrompt, String> {
-    let data = db.0.lock().unwrap();
+pub fn meaning_prompt(_db: tauri::State<'_, DatabaseState>) -> Result<MeaningPrompt, String> {
+    // let data = db.0.lock().unwrap();
 
-    let mut rng = rand::thread_rng();
-    let prompt_idx = rng.gen_range(0, data.len());
-    let ans_word = data.get(prompt_idx).unwrap();
+    // let mut rng = rand::thread_rng();
+    // let prompt_idx = rng.gen_range(0, data.len());
+    // let ans_word = data.get(prompt_idx).unwrap();
 
-    let mut alike: Vec<(usize, f64)> = vec![(0, f64::MAX); 10];
-    for i in 0..data.len() {
-        if i == prompt_idx {
-            continue;
-        }
-        let cosine_similarity = cosine(&ans_word.vec, &data.get(i).unwrap().vec);
-        // println!("similarity: {}", cosine_similarity);
-        if let Some(idx) = smallest_bigger(&alike, cosine_similarity) {
-            alike[idx] = (i, cosine_similarity); 
-        }
-    }
+    // let mut alike: Vec<(usize, f64)> = vec![(0, f64::MAX); 10];
+    // for i in 0..data.len() {
+    //     if i == prompt_idx {
+    //         continue;
+    //     }
+    //     let cosine_similarity = cosine(&ans_word.vec, &data.get(i).unwrap().vec);
+    //     if let Some(idx) = smallest_bigger(&alike, cosine_similarity) {
+    //         alike[idx] = (i, cosine_similarity);
+    //     }
+    // }
 
-    let ans = rng.gen_range(0, 6);
-    let mut points: Vec<usize> = vec![];
-    while points.len() < 6 {
-        let idx: usize = alike.get(rng.gen_range(0, 10)).unwrap().0;
-        if points.contains(&idx) {
-            continue;
-        }
-        points.push(idx);
-    }
+    // let ans = rng.gen_range(0, 4);
+    // let mut points: Vec<usize> = vec![];
+    // while points.len() < 4 {
+    //     let idx: usize = alike.get(rng.gen_range(0, 10)).unwrap().0;
+    //     if points.contains(&idx) {
+    //         continue;
+    //     }
+    //     points.push(idx);
+    // }
 
-    points[ans] = prompt_idx;
+    // points.shuffle(&mut thread_rng());
+    // points[ans] = prompt_idx;
 
-    let prompt = MeaningPrompt {
-        answer: "ABCDEF".chars().nth(ans).unwrap().to_string(),
-        word: ans_word.word.clone(),
-        a: data.get(points[0]).unwrap().meaning.clone(),
-        b: data.get(points[1]).unwrap().meaning.clone(),
-        c: data.get(points[2]).unwrap().meaning.clone(),
-        d: data.get(points[3]).unwrap().meaning.clone(),
-    };
-
-    Ok(prompt)
+    // Ok(MeaningPrompt {
+    //     answer: "ABCDEF".chars().nth(ans).unwrap().to_string(),
+    //     word: ans_word.word.clone(),
+    //     a: data.get(points[0]).unwrap().meaning.clone(),
+    //     b: data.get(points[1]).unwrap().meaning.clone(),
+    //     c: data.get(points[2]).unwrap().meaning.clone(),
+    //     d: data.get(points[3]).unwrap().meaning.clone(),
+    // })
+    Err("Not implemented yet".to_string())
 }
