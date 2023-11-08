@@ -17,6 +17,12 @@ const Option = ({text, active, state, onClick} : {text: string | undefined, acti
 
 const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch<React.SetStateAction<number>>}) => {
     const [selected, setSelected] = useState("");
+    const [caching, setCaching] = useState(false);
+    const [promptCache, setPromptCache] = useState<{
+        a: string, b: string, 
+        c: string, d: string, 
+        e: string, f: string, 
+        answer: string, meaning: string, pos: string}[]>([]);
     const [promt, setPrompt] = useState<{
         a: string, b: string, 
         c: string, d: string, 
@@ -41,14 +47,40 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
         } 
     }
 
+    const fill_cache = async () => {
+        if (caching) return;
+        setCaching(true);
+        let promptcachesexy = [];
+        while (promptcachesexy.length < 50) {
+            try {
+                let res = await invoke('word_prompt');
+                promptcachesexy.push(res as { a: string; b: string; c: string; d: string; e: string; f: string; answer: string; meaning: string; pos: string });
+                console.log(res);
+            } catch (err) {
+                console.log(err);
+                break;
+            }
+        }
+        setPromptCache(promptcachesexy);
+        setCaching(false);
+    }
+
     const fetch_prompt = async () => {
         setLoading(true);
-        try {
-            let res = await invoke('word_prompt');
-            setPrompt(res as { a: string; b: string; c: string; d: string; e: string; f: string; answer: string; meaning: string; pos: string } | undefined);
-            console.log(res);
-        } catch (err) {
-            console.log(err);
+        if (promptCache.length > 0) {
+            setPrompt(promptCache[0]);
+            setPromptCache(promptCache.slice(1));
+        } else {
+            try {
+                let res = await invoke('word_prompt');
+                setPrompt(res as { a: string; b: string; c: string; d: string; e: string; f: string; answer: string; meaning: string; pos: string } | undefined);
+                console.log(res);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        if (promptCache.length < 10) {
+            fill_cache();
         }
         setSelected("");
         setbuttonstates(BTS);
@@ -74,6 +106,9 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
     }
 
     useEffect(() => {score = 0; fetch_prompt(); setScore(score);}, [])
+    useEffect(() => {
+        fill_cache()
+    }, []);
 
     return (
         <Stack m={12}>

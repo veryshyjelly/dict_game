@@ -61,6 +61,7 @@ impl Ord for Point {
 
 #[tauri::command]
 pub fn word_prompt(db: tauri::State<'_, DatabaseState>) -> Result<WordPrompt, String> {
+    println!("called this function");
     let data = db.0.lock().unwrap();
 
     let mut rng = rand::thread_rng();
