@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "dict_game",
+    "productName": "Dictonary Game",
     "version": "0.3.1"
   },
   "tauri": {
@@ -40,7 +40,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "resizable": true,
+        "resizable": false,
         "title": "dict_game",
         "width": 1000,
         "height": 500

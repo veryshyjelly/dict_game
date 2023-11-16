@@ -8,7 +8,7 @@ const Option = ({text, active, state, onClick} : {text: string | undefined, acti
     return (
         <div className="option" style={{width: 280}} onClick={onClick} key={text}>
             <Button my={40} variant={active ? "light" : "outline" } 
-                color={state == 2 ? "teal" : state == 3 ? "red" : "blue"} 
+                color={state == 2 ? "teal" : state == 3 ? "red" : "blue.1.5"} 
                 fullWidth radius={"xl"} size="lg" fw={500}>{text}</Button>
         </div>
     )
@@ -51,7 +51,7 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
         if (caching) return;
         setCaching(true);
         let promptcachesexy = [];
-        while (promptcachesexy.length < 50) {
+        while (promptcachesexy.length < 2) {
             try {
                 let res = await invoke('word_prompt');
                 promptcachesexy.push(res as { a: string; b: string; c: string; d: string; e: string; f: string; answer: string; meaning: string; pos: string });
@@ -113,16 +113,16 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
     return (
         <Stack m={12}>
         <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-            <Text mx={"auto"} my={20} fw={900} fz={25}>SELECT WORD FOR</Text>
+            <Text mx={"auto"} my={20} fw={900} c={"gray.3"} fz={25}>SELECT WORD FOR</Text>
 
         <div className="prompt" style={{margin: "10px", border: "1px solid lightblue", borderRadius: "30px"}}
          onClick={handlebuttonclick(undefined)}>
-            <Text my={20} fw={500} fz={20} mx={60} style={{userSelect: "none"}}>
+            <Text my={20} fw={500} fz={20} mx={60} c={"gray.3"} style={{userSelect: "none"}}>
                 {promt?.meaning}
             </Text>
-            <div style={{border: "2px solid lightgreen", borderRadius: "20px",
+            <div style={{border: "2px solid lightblue", borderRadius: "20px",
                  position: "absolute", right: 50, top: 130, padding: 5}}>
-                <Text>
+                <Text c={"gray.2"}>
                     {promt?.pos}
                 </Text>
             </div>

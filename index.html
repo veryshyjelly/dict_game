@@ -7,8 +7,16 @@
     <title>Tauri + React + TS</title>
   </head>
 
-  <body style="background: rgb(243,255,217);
-background: radial-gradient(circle, rgba(243,255,217,1) 10%, rgba(178,236,255,1) 29%, rgba(255,250,196,1) 54%, rgba(207,255,224,1) 92%);">
+  <body style="background: rgb(243,255,217);">
+    <div style="width: 100%; height: 100%; position: absolute;
+background-image: url('bg3.jpg');
+background-size: cover;
+z-index: -10;
+    "></div>
+    <div style="width: 100%; height: 100%; position: absolute;
+ background-color: rgba(0,0,0, 0.5);
+z-index: -9;
+    "></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
