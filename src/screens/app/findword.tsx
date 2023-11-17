@@ -51,7 +51,7 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
         if (caching) return;
         setCaching(true);
         let promptcachesexy = [];
-        while (promptcachesexy.length < 2) {
+        while (promptcachesexy.length < 20) {
             try {
                 let res = await invoke('word_prompt');
                 promptcachesexy.push(res as { a: string; b: string; c: string; d: string; e: string; f: string; answer: string; meaning: string; pos: string });
@@ -79,7 +79,7 @@ const ChooseWord = ({score, setScore} : {score: number, setScore: React.Dispatch
                 console.log(err);
             }
         }
-        if (promptCache.length < 10) {
+        if (promptCache.length < 2) {
             fill_cache();
         }
         setSelected("");
